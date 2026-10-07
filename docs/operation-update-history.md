@@ -10,3 +10,14 @@
 - Notion buttons, automations, integration access, Solapi templates and real device checks: not verified.
 - No real parent messages, student deletions or sample-data backfill performed.
 - Existing frontend configuration embedding is retained; this is not a no-hardcoding redesign.
+
+## Partial deployment checkpoint
+
+- Code commit: 4aab9bddcfa3ef38fa763bc73caa96b66aac6333; 148 files matched prepared source.
+- Pages run 37653853199: success; four HTML screens returned HTTP 200 and matched source.
+- Supabase run 37653853492: target guard, type checks, tests and regression guard passed; DB connection failed before migration application, and function deployment was skipped.
+- Failure cause: session-pooler endpoint did not match the operational project. Correct endpoint verified from the owner dashboard; migration push and status lookup corrected. Password and secrets unchanged.
+- Retry outcome: pending.
+- Notion registration report-link formula updated; actual button and automation actions remain unverified.
+- Vault secret-name inspection returned empty; queue admin key setup remains pending.
+- Full installation is INCOMPLETE; real-student use and parent messaging have not been approved or tested.
