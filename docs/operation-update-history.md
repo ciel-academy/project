@@ -5,8 +5,8 @@
 - Operator: Notion AI, workspace owner approved deployment continuation.
 - Full installation status: NOT VERIFIED / IN PROGRESS.
 - Code preparation: operational URLs and legacy public anon key replaced; original student-number seed omitted; deployment-target guards added; public-assets-only Pages workflow added.
-- Local regression guard: passed. Type checks and Deno tests: pending CI.
-- Database migrations, Edge Function deployment, Pages deployment: pending CI verification.
+- Regression guard, all function type checks and Deno test groups: passed in deployment CI.
+- Database migrations, all Edge Functions and Pages deployment: successful; operational acceptance remains pending.
 - Notion buttons, automations, integration access, Solapi templates and real device checks: not verified.
 - No real parent messages, student deletions or sample-data backfill performed.
 - Existing frontend configuration embedding is retained; this is not a no-hardcoding redesign.
@@ -24,3 +24,11 @@
 
 - Post-deployment database checks: source student-number seed count is zero. Four scheduled jobs are active and target this operation. Vault queue admin key is still absent, so scheduled queue processing is not ready.
 - Deployment success is confirmed; full installation acceptance remains incomplete pending Vault setup, Notion webhooks/integration mappings, and approved functional tests.
+
+## Vault and Notion follow-up
+
+- Owner saved the queue admin key in Vault. Secret-name existence confirmed; no secret value was read or printed.
+- Latest scheduled HTTP response returned 200 without timeout or network error; earlier responses were 401. This does not verify every scheduled job or a real task end-to-end.
+- School search formula changed from the source Pages URL to operational Pages. Pre-edit formula preserved privately. Actual school connection and calendar import are not tested.
+- Earlier missing-Vault notes above describe the previous checkpoint and are superseded by this follow-up.
+- Next operator step: inspect the registration student-page-sync button webhook endpoint, page-ID payload and masked authentication configuration. Do not expose credentials.
