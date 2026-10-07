@@ -17,7 +17,10 @@
 - Pages run 37653853199: success; four HTML screens returned HTTP 200 and matched source.
 - Supabase run 37653853492: target guard, type checks, tests and regression guard passed; DB connection failed before migration application, and function deployment was skipped.
 - Failure cause: session-pooler endpoint did not match the operational project. Correct endpoint verified from the owner dashboard; migration push and status lookup corrected. Password and secrets unchanged.
-- Retry outcome: pending.
+- Retry outcome: SUCCESS. Supabase run https://github.com/ciel-academy/project/actions/runs/37655023128 completed all steps successfully for commit 88b4e701c7037d09ce2043b66a0f3eba4d42d48b. Seventeen database migrations were confirmed via Supabase MCP. The complete function deployment and repository function-list check passed. The baseline secret-name check passed; secret values and all integration mappings are not verified.
 - Notion registration report-link formula updated; actual button and automation actions remain unverified.
 - Vault secret-name inspection returned empty; queue admin key setup remains pending.
 - Full installation is INCOMPLETE; real-student use and parent messaging have not been approved or tested.
+
+- Post-deployment database checks: source student-number seed count is zero. Four scheduled jobs are active and target this operation. Vault queue admin key is still absent, so scheduled queue processing is not ready.
+- Deployment success is confirmed; full installation acceptance remains incomplete pending Vault setup, Notion webhooks/integration mappings, and approved functional tests.
