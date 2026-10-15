@@ -46,3 +46,15 @@
 - Preserve operation-specific deployment-target guards, connection settings, public-assets-only Pages staging and all previous history during subsequent code work. Scheduled attendance workflow definitions were inspected; their curl calls do not fail on HTTP errors, so job success alone is not sync verification.
 - Optional security/search/copy-read settings, legacy-function deletion and historical bulk changes: ON HOLD. No student deletion, parent messaging, token regeneration, or secret changes were performed.
 - Next: operator confirms the v2.5.10 prerequisite; proceed with remaining patch preconditions and operator-only formula/automation work before code deployment in an idle academy window.
+
+
+## 2026-10-15 — v2.5.10·v2.5.11 선행 코드 적용 (배포 결과 대기)
+
+- 전체 업데이트 및 CL 운영 고유 설정 보존 병합: 운영자 승인.
+- 개별 출석 sync-attendance 웹훅은 운영자가 없음 확인. 자동화 액션 원문을 직접 검증한 것은 아님. 보고서 동기화·삭제·이름 조정 자동화는 유지.
+- 원본 v2.5.10 f9be7fc327d752ef78fea811027dc2353199e5e1 함수 패치 반영. 운영 고유 워크플로에 원본의 scheduled-only 테스트 단계만 추가.
+- 그 뒤 v2.5.11-code.patch git apply --check 성공 후 적용. 운영 Supabase 프로젝트 대상 가드·서울 DB pooler·공개 자산 전용 Pages 구성 보존.
+- 일정 DB 학부모 공개 checkbox 추가, 기본 템플릿 false 확인. 학원일정 캘린더에 숨김=false 필터 추가. 전체 학사일정의 원본 보기 필터 보존. 기존 일정 공개 일괄 변경 없음.
+- 후속 v2.6.9 준비: 학습활동 메모 text·🟡 일부 제출 select 옵션 추가, 기존 옵션 ID 보존. 과제제출됨 수식은 🔵 제출 동등 비교여서 변경 불필요.
+- 로컬 Deno 1.46.3: 104 tests passed, 0 failed. 모든 함수 entrypoint deno check 통과. 회귀 가드 통과.
+- 이 기록의 코드 커밋은 배포 트리거이며 CI·실환경 검증 결과는 별도로 기록한다. 현재 버전 완료 확정, 학생 데이터 삭제·대량 변경·실발송·토큰 재발급·Secrets 변경 없음.
