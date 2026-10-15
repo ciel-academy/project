@@ -2,7 +2,7 @@ name: Deploy CIEL web pages
 on:
   push:
     branches: [main]
-    paths: ['*.html', '*.js', 'vendor/**', '.github/workflows/deploy-pages.yml']
+    paths: ['*.html', '*.js', 'vendor/**', 'assets/**', '.github/workflows/deploy-pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,6 +25,7 @@ jobs:
           mkdir _site
           cp ./*.html ./*.js _site/
           cp -r vendor _site/vendor
+          cp -r assets _site/assets
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

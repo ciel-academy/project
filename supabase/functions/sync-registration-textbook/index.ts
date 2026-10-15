@@ -1,10 +1,11 @@
+import { authorizeKey, securityEnabled } from "../_shared/adminSecurity.ts"
 // sync-registration-textbook
 //
 // 등록 DB "개별교재 생성" 버튼 하나로 그룹/개별 진도 모두 처리한다 (등록일/종료일 편집
 // 웹훅에는 더 이상 반응하지 않음 - 그 자동화는 삭제됨, 클래스 세팅은 완전 수동).
 //
 // 클래스 세팅(수동): 담당자가 진도교재(학원) DB에 "반별교재"(템플릿) 행을 직접 만들어
-// 클래스에 연결해둔다. 템플릿은 정규교재/클래스/진도방식(그룹 진도 | 개별 진도)를 가진다.
+// 클래스에 연결해둔다. 템플릿은 라이브러리(옛 이름 정규교재)/클래스/진도방식(그룹 진도 | 개별 진도)를 가진다.
 //
 // "개별교재 생성" 버튼(등록 페이지)을 누르면:
 //   1. 등록의 클래스에 연결된 반별교재(템플릿)를 모두 확인한다.
@@ -24,12 +25,12 @@
 // 라우트:
 //   POST /sync-registration-textbook/create-individual  <- 등록 DB "개별교재 생성" 버튼
 //   POST /sync-registration-textbook/create-class        <- 클래스(학원) DB "교재 생성" 버튼
-//   POST /sync-registration-textbook/cleanup-on-end      <- sync-registration-timetable이 등록
-//                                                            종료 확정 시 내부적으로 호출
+//   POST /sync-registration-textbook/cleanup-on-end      <- sync-registration-end가 등록
+//                                                            종료 처리 시 내부적으로 호출
 //
 // (2026-09-18, 큐 기반 순차 처리 도입, Phase 3) create-individual 라우트만 큐로 옮겨서
 // process-sync-queue 워커가 순서대로 처리하도록 바꿨다 (_shared/registrationTextbookTarget.ts). cleanup-on-end
-// 는 sync-registration-timetable/sync-registration-end의 registrationSync.ts가 내부적으로 동기 호출(fetch)해서
+// 는 sync-registration-end의 registrationSync.ts가 내부적으로 동기 호출(fetch)해서
 // 즉시 결과를 받아야 하므로 큐를 거치지 않고 그대로 동기 처리된다.
 //
 // (2026-09-20, 웹훅 코드 정리 4단계) create-individual 라우트의 "락 확인 -> 처리중 표시 -> 큐 적재 ->
@@ -92,7 +93,7 @@
 // 바꿨다 -- 이 라우트(index.ts)의 호출 방식 자체는 바뀌지 않는다. 자세한 내용은
 // _shared/registrationTextbookTarget.ts의 PART N-12 주석 참고.
 
-import { extractPageId, getPage } from "../_shared/notionClient.ts"
+import { extractPageId, getPage, describeBody } from "../_shared/notionClient.ts"
 import {
 	TEXTBOOK_STATUS_SPEC,
 	cleanupUnusedBooksOnEnd,
@@ -100,7 +101,9 @@ import {
 	CLASS_TEXTBOOK_STATUS_SPEC,
 	getPendingClassTextbookRegistrations,
 	createBooksForOneRegistrationWithStatus,
+	snapshotFromWebhookBody,
 } from "../_shared/registrationTextbookTarget.ts"
+import { enqueueSync, wakeSyncQueueWorker } from "../_shared/syncQueue.ts"
 import { runSyncWebhookForPage } from "../_shared/webhookIngest.ts"
 import { resolveAdminKeyFromRequest, getCurrentAdminKey } from "../_shared/adminShared.ts"
 import { runInBackground, respondAccepted } from "../_shared/backgroundTask.ts"
@@ -301,11 +304,12 @@ Deno.serve(async (req: Request) => {
 	} catch {
 		// 빈 바디 허용하지 않음 - 아래에서 pageId 누락으로 에러 처리
 	}
-	console.log("sync-registration-textbook payload:", route, JSON.stringify(body))
+	// 본문 전체는 남기지 않는다(v2.6.10). Notion 자동화 본문에는 연락처·리포트 토큰 같은 속성이, 예전 버튼 본문에는 adminKey가 들어 있을 수 있다.
+	console.log("sync-registration-textbook request:", route, describeBody(body))
 
 	const adminKey = resolveAdminKeyFromRequest(req, body)
-	const currentAdminKey = await getCurrentAdminKey()
-	if (!adminKey || adminKey !== currentAdminKey) {
+	const currentAdminKey = securityEnabled() ? "" : await getCurrentAdminKey()
+	if (!adminKey || !await authorizeKey(req, adminKey, currentAdminKey)) {
 		return new Response(JSON.stringify({ error: "unauthorized" }), {
 			status: 401,
 			headers: { "Content-Type": "application/json" },
@@ -325,6 +329,13 @@ Deno.serve(async (req: Request) => {
 			return new Response(JSON.stringify({ error: "pageId를 찾을 수 없음" }), { status: 400 })
 		}
 
+		// (v2.6.10, 웹훅 재정리 1단계) 등록 DB 자동화 "교재 상태가 ⚪ 대기로 바뀌면"이 부르는 경로.
+		// 페이지를 읽지 않고(본문의 클래스·이름을 큐에 함께 저장) 바로 큐에 넣는다. 처리는 process-sync-queue가 한 건씩.
+		if (route === "queue") {
+			await enqueueSync("sync-registration-textbook", { pageId, snapshot: snapshotFromWebhookBody(body, pageId) })
+			wakeSyncQueueWorker()
+			return respondAccepted({ pageId, queued: true })
+		}
 		if (route === "create-individual") {
 			return await runSyncWebhookForPage(pageId, {
 				functionName: "sync-registration-textbook",
