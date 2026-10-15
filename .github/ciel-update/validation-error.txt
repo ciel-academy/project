@@ -1,0 +1,102 @@
+ciel-regressions.log
+
+❌ 폐기한 웹훅 함수 이름이 다시 들어왔습니다. 되살리려면 이 검사부터 고치세요:
+./.github/ciel-update/prepare.py:30:for d in ['mark-report-source-dirty','sync-registration-timetable','sync-school-schedules','sync-student-report']:
+
+회귀 가드 실패 -- 위 문제를 고친 뒤 다시 배포하세요.
+
+ciel-tests.log
+
+[libraryCopy] 준비 확인 실패(Notion을 읽음): unmocked https://mock.supabase/rest/v1/sync_cursors?source=eq.lib_books&select=last_synced_at
+[libraryCopy] 준비 확인 실패(Notion을 읽음): unmocked https://mock.supabase/rest/v1/sync_cursors?source=eq.lib_books&select=last_synced_at
+[0m[38;5;245m----- post-test output end -----[0m
+set-cover: https image or empty, only on library books ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+register: series and publisher picked on screen override the automatic match ...
+[0m[38;5;245m------- post-test output -------[0m
+[libraryCopy] 준비 확인 실패(Notion을 읽음): unmocked https://mock.supabase/rest/v1/sync_cursors?source=eq.lib_books&select=last_synced_at
+[libraryCopy] 준비 확인 실패(Notion을 읽음): unmocked https://mock.supabase/rest/v1/sync_cursors?source=eq.lib_books&select=last_synced_at
+[libraryCopy] 준비 확인 실패(Notion을 읽음): unmocked https://mock.supabase/rest/v1/sync_cursors?source=eq.lib_books&select=last_synced_at
+[0m[38;5;245m----- post-test output end -----[0m
+register: series and publisher picked on screen override the automatic match ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+set-book: cover, series and publisher only when sent; empty clears ...
+[0m[38;5;245m------- post-test output -------[0m
+[libraryCopy] 준비 확인 실패(Notion을 읽음): unmocked https://mock.supabase/rest/v1/sync_cursors?source=eq.lib_books&select=last_synced_at
+[0m[38;5;245m----- post-test output end -----[0m
+set-book: cover, series and publisher only when sent; empty clears ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+edit-series: add, rename, order and remove keep option ids; used or duplicate refused ...
+[0m[38;5;245m------- post-test output -------[0m
+[libraryCopy] 준비 확인 실패(Notion을 읽음): unmocked https://mock.supabase/rest/v1/sync_cursors?source=eq.lib_books&select=last_synced_at
+[textbook-api] 시리즈 변경 거부: 400 {"object":"error","code":"validation_error","message":"Invalid select option, duplicates not allowed: X"}
+[0m[38;5;245m----- post-test output end -----[0m
+edit-series: add, rename, order and remove keep option ids; used or duplicate refused ... [0m[32mok[0m [0m[38;5;245m(3ms)[0m
+edit-series: options sharing an id are left out (unused) so Notion accepts the list; used ones stop with a clear message ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+edit-series: uses the options Notion returns instead of reading the list again ...
+[0m[38;5;245m------- post-test output -------[0m
+[libraryCopy] 준비 확인 실패(Notion을 읽음): unmocked https://mock.supabase/rest/v1/sync_cursors?source=eq.lib_books&select=last_synced_at
+[0m[38;5;245m----- post-test output end -----[0m
+edit-series: uses the options Notion returns instead of reading the list again ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+kyobo-book: product number only, fixed Kyobo address, title/ISBN/list price/publisher/toc units; failure is 502 ...
+[0m[38;5;245m------- post-test output -------[0m
+[textbook-api] 교보문고 상품 정보 실패: S000003945991 HTTP 403
+[0m[38;5;245m----- post-test output end -----[0m
+kyobo-book: product number only, fixed Kyobo address, title/ISBN/list price/publisher/toc units; failure is 502 ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+[0m[38;5;245mrunning 8 tests from ./supabase/functions/_shared/textbookToc_test.ts[0m
+HTML toc lines: br/p, entities, spaces ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+big units: 1-1 numbering restarts in each big unit, pages from line ends ... [0m[32mok[0m [0m[38;5;245m(1ms)[0m
+no big units: plain 1. numbering ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+first small unit page fills a mid unit without a page; smalls are not units ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+only 1-1 style lines under big units become mid units ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+unnumbered list: each line is a unit; skip lines start excluded ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+mid units before the first big unit are left out, years are not pages ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+cleanUnits trims, drops empty names and bad pages, caps the count ... [0m[32mok[0m [0m[38;5;245m(0ms)[0m
+
+[0m[32mok[0m | 259 passed | 0 failed [0m[38;5;245m(6s)[0m
+
+
+ciel-typecheck.log
+
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/generate-tuition/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/get-legal-document-data/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/get-report-detail/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/get-report-fast/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/get-report-file/index.ts
+[0m[32mDownload[0m https://registry.npmjs.org/solapi
+[0m[32mDownload[0m https://registry.npmjs.org/date-fns
+[0m[32mDownload[0m https://registry.npmjs.org/effect
+[0m[32mDownload[0m https://registry.npmjs.org/@standard-schema/spec
+[0m[32mDownload[0m https://registry.npmjs.org/fast-check
+[0m[32mDownload[0m https://registry.npmjs.org/pure-rand
+[0m[32mDownload[0m https://registry.npmjs.org/solapi/-/solapi-6.0.1.tgz
+[0m[32mDownload[0m https://registry.npmjs.org/date-fns/-/date-fns-4.4.0.tgz
+[0m[32mDownload[0m https://registry.npmjs.org/effect/-/effect-3.22.2.tgz
+[0m[32mDownload[0m https://registry.npmjs.org/@standard-schema/spec/-/spec-1.1.0.tgz
+[0m[32mDownload[0m https://registry.npmjs.org/fast-check/-/fast-check-3.23.2.tgz
+[0m[32mDownload[0m https://registry.npmjs.org/pure-rand/-/pure-rand-6.1.0.tgz
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/kiosk-checkin/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/kiosk-prepare/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/list-students/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/process-sync-queue/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/school-api/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/send-class-daily-reports/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/send-daily-report/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/send-inquiry-receipt/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/send-report/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/send-selected-notifications/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/send-textbook-notice/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/send-tuition-notice/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/status-watchdog/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-attendance/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-class-report-cache/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-class-room-copy/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-dashboard-link/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-exam-scope/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-failure-audit/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-registration-class-session/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-registration-end/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-registration-enroll/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-registration-textbook/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-report-cache/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-school-calendar/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/sync-textbook-distribution/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/textbook-api/index.ts
+[0m[32mCheck[0m file:///home/runner/work/project/project/supabase/functions/toggle-report-link/index.ts
