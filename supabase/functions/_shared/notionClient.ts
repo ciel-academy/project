@@ -1,4 +1,4 @@
-// 공용 Notion API 헬퍼. sync-registration-timetable에서 검증된 재시도/병렬처리 로직과
+// 공용 Notion API 헬퍼. 등록 동기화 함수에서 검증된 재시도/병렬처리 로직과
 // sync-registration-textbook에서 발견된 페이지ID 추출 버그 수정을 합쳐서 한 곳에 둔다.
 // 이렇게 하면 한쪽에서 고친 버그나 개선사항이 다른 쪽에도 자동으로 적용된다 (로드맵 5-9).
 
@@ -486,4 +486,13 @@ export function extractPageId(body: unknown): string | null {
 		}
 	}
 	return null
+}
+
+// 로그용 본문 요약(v2.6.10): 페이지 id와 최상위·data 키 이름만. 값은 남기지 않는다 — Notion 자동화 본문에는
+// 연락처·리포트 토큰 같은 속성이, 예전 버튼 본문에는 adminKey가 들어 있을 수 있다.
+export function describeBody(body: unknown): string {
+	if (typeof body !== "object" || body === null) return "(본문 없음)"
+	const obj = body as Record<string, unknown>
+	const data = typeof obj.data === "object" && obj.data !== null ? Object.keys(obj.data as Record<string, unknown>) : []
+	return `pageId=${extractPageId(body) ?? "(없음)"} keys=[${Object.keys(obj).join(",")}]${data.length ? ` data=[${data.join(",")}]` : ""}`
 }
