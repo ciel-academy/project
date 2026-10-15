@@ -19,13 +19,22 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v1.x
-      - name: Run all isolated function tests and type checks
+      - name: Isolated function tests
         run: |
-          set -e
-          deno test --allow-env --allow-read=admin_settings.js supabase/functions/_shared/*_test.ts supabase/functions/generate-classes/index_test.ts supabase/functions/sync-attendance/index_test.ts
-          for f in supabase/functions/*/index.ts; do deno check "$f"; done
-          bash scripts/check-known-regressions.sh
-          node tests/design-lint.cjs
+          set -o pipefail
+          deno test --allow-env --allow-read=admin_settings.js supabase/functions/_shared/*_test.ts supabase/functions/generate-classes/index_test.ts supabase/functions/sync-attendance/index_test.ts 2>&1 | tee "$RUNNER_TEMP/ciel-tests.log"
+      - name: Type-check all functions
+        run: |
+          set -eo pipefail
+          for f in supabase/functions/*/index.ts; do deno check "$f"; done 2>&1 | tee "$RUNNER_TEMP/ciel-typecheck.log"
+      - name: Regression guard
+        run: |
+          set -o pipefail
+          bash scripts/check-known-regressions.sh 2>&1 | tee "$RUNNER_TEMP/ciel-regressions.log"
+      - name: Design rules
+        run: |
+          set -o pipefail
+          node tests/design-lint.cjs 2>&1 | tee "$RUNNER_TEMP/ciel-design.log"
       - name: Test SQL with isolated simulated PostgreSQL
         run: |
           set -e
@@ -41,4 +50,22 @@ jobs:
           rm .github/workflows/prepare-ciel-v26.yml .github/ciel-update/prepare.py
           git add -A
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "feat: prepare v2.6.10 preserving CIEL environment and historical migrations"
+          git push origin HEAD:refs/heads/update/cl-v2.6.10
+      - name: Record sanitized validation diagnostics on preparation branch
+        if: failure()
+        run: |
+          set -e
+          test "${GITHUB_REF_NAME}" = "update/cl-v2.6.10"
+          python3 - <<'PYDIAG'
+          import os,re
+          from pathlib import Path
+          lines=[]
+          for p in sorted(Path(os.environ['RUNNER_TEMP']).glob('ciel-*.log')):
+              text='\n'.join(p.read_text(errors='replace').splitlines()[-45:])
+              text=re.sub(r'eyJ[A-Za-z0-9_.-]+|(?:sbp_|gh[pousr]_)[A-Za-z0-9_]+','[redacted]',text)
+              lines.extend([p.name,text])
+          Path('.github/ciel-update/validation-error.txt').write_text('\n\n'.join(lines))
+          PYDIAG
+          git add .github/ciel-update/validation-error.txt
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit --only .github/ciel-update/validation-error.txt -m "docs: isolated validation diagnostics"
           git push origin HEAD:refs/heads/update/cl-v2.6.10
