@@ -32,3 +32,17 @@
 - School search formula changed from the source Pages URL to operational Pages. Pre-edit formula preserved privately. Actual school connection and calendar import are not tested.
 - Earlier missing-Vault notes above describe the previous checkpoint and are superseded by this follow-up.
 - Next operator step: inspect the registration student-page-sync button webhook endpoint, page-ID payload and masked authentication configuration. Do not expose credentials.
+
+## 2026-10-15 — v2.6.10 update preparation (PARTIAL / PAUSED)
+
+- Operator: CIEL Notion AI, workspace patch requester approved the complete update plan.
+- Target: v2.6.10. Read-only source: hada-notion/project1 main ffa61566a7e9ce4dfcf0dd740b4657747379fadb.
+- Operational baseline inspected: ciel-academy/project main 160d5551b8263bc2d3537fc2e705dbfe7d31e27e. Last fully accepted version remains NOT VERIFIED; the installation baseline label is not acceptance evidence.
+- Private pre-change snapshot: four Notion database configurations, including schemas and layouts; retained in internal system information. Button actions and automation definitions were not exposed by the Notion tools. Nested formula references were opaque; not a complete restorable formula export.
+- Completed safe pre-deployment preparation: session checkbox 보강, attendance text 메모 below teacher comment, learning-record text 주제 above range, and registration report-link property renamed 안내 링크 to 학생 페이지 while preserving the operational formula and URL. Structured update results confirmed schema and layout changes; real-device behavior not tested.
+- Supabase checks: operational project identity confirmed, 17 existing migrations listed, queue Vault key name exists (value not read). These checks do not prove queued tasks or webhooks work end-to-end.
+- PAUSED: v2.5.10 requires operator confirmation that attendance creation/edit automation no longer calls the individual sync-attendance webhook (or confirmation that no such action exists). Preserve modification-time recording and unrelated buttons/actions.
+- Source code changes, deployments and new migrations: NOT PERFORMED. v2.5.11 and v2.6 functional acceptance: NOT VERIFIED. No version promotion.
+- Preserve operation-specific deployment-target guards, connection settings, public-assets-only Pages staging and all previous history during subsequent code work. Scheduled attendance workflow definitions were inspected; their curl calls do not fail on HTTP errors, so job success alone is not sync verification.
+- Optional security/search/copy-read settings, legacy-function deletion and historical bulk changes: ON HOLD. No student deletion, parent messaging, token regeneration, or secret changes were performed.
+- Next: operator confirms the v2.5.10 prerequisite; proceed with remaining patch preconditions and operator-only formula/automation work before code deployment in an idle academy window.
