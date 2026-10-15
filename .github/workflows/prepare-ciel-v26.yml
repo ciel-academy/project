@@ -1,0 +1,44 @@
+name: Prepare CIEL v2.6.10 integration
+on:
+  push:
+    branches: ['update/cl-v2.6.10']
+    paths: ['.github/workflows/prepare-ciel-v26.yml', '.github/ciel-update/prepare.py']
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch pinned read-only source
+        run: git fetch https://github.com/hada-notion/project1.git ffa61566a7e9ce4dfcf0dd740b4657747379fadb
+      - name: Apply source preserving CIEL deployment settings
+        run: python3 .github/ciel-update/prepare.py
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v1.x
+      - name: Run all isolated function tests and type checks
+        run: |
+          set -e
+          deno test --allow-env --allow-read=admin_settings.js supabase/functions/_shared/*_test.ts supabase/functions/generate-classes/index_test.ts supabase/functions/sync-attendance/index_test.ts
+          for f in supabase/functions/*/index.ts; do deno check "$f"; done
+          bash scripts/check-known-regressions.sh
+          node tests/design-lint.cjs
+      - name: Test SQL with isolated simulated PostgreSQL
+        run: |
+          set -e
+          npm install --prefix "$RUNNER_TEMP/ciel-sql" @electric-sql/pglite@0.5.8 --no-audit --no-fund
+          export PGLITE_MODULE="$RUNNER_TEMP/ciel-sql/node_modules/@electric-sql/pglite"
+          node tests/admin-security-sql.cjs
+          node tests/class-room-copy-sql.cjs
+          node tests/class-room-copy-cron-sql.cjs
+      - name: Commit verified integration on preparation branch only
+        run: |
+          set -e
+          test "${GITHUB_REF_NAME}" = "update/cl-v2.6.10"
+          rm .github/workflows/prepare-ciel-v26.yml .github/ciel-update/prepare.py
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "feat: prepare v2.6.10 preserving CIEL environment and historical migrations"
+          git push origin HEAD:refs/heads/update/cl-v2.6.10
