@@ -15,7 +15,9 @@ jobs:
       - name: Fetch pinned read-only source
         run: git fetch https://github.com/hada-notion/project1.git ffa61566a7e9ce4dfcf0dd740b4657747379fadb
       - name: Apply source preserving CIEL deployment settings
-        run: python3 .github/ciel-update/prepare.py
+        run: |
+          python3 .github/ciel-update/prepare.py
+          rm -f .github/ciel-update/prepare.py .github/ciel-update/validation-error.txt
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v1.x
@@ -47,7 +49,7 @@ jobs:
         run: |
           set -e
           test "${GITHUB_REF_NAME}" = "update/cl-v2.6.10"
-          rm .github/workflows/prepare-ciel-v26.yml .github/ciel-update/prepare.py
+          rm -f .github/workflows/prepare-ciel-v26.yml .github/ciel-update/prepare.py .github/ciel-update/validation-error.txt
           git add -A
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "feat: prepare v2.6.10 preserving CIEL environment and historical migrations"
           git push origin HEAD:refs/heads/update/cl-v2.6.10
@@ -64,6 +66,7 @@ jobs:
               text='\n'.join(p.read_text(errors='replace').splitlines()[-45:])
               text=re.sub(r'eyJ[A-Za-z0-9_.-]+|(?:sbp_|gh[pousr]_)[A-Za-z0-9_]+','[redacted]',text)
               lines.extend([p.name,text])
+          Path('.github/ciel-update').mkdir(parents=True,exist_ok=True)
           Path('.github/ciel-update/validation-error.txt').write_text('\n\n'.join(lines))
           PYDIAG
           git add .github/ciel-update/validation-error.txt
