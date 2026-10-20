@@ -121,5 +121,12 @@
 
 | 날짜 | 버전 | 적용 주체 | 상태·범위 |
 | --- | --- | --- | --- |
-| 2026-10-20 | v2.7.11 | CL AI, 원본 지원 검토 | 미사용 웹훅 코드·체크리스트 정리 반영. PR #3 main 병합: e78a4ab3938bfe25b4b0a6a66babaa653d040fcf (2026-10-20 16:04 KST). 원본 지원 확인: Deploy Supabase Functions·Deploy CIEL web pages·Web and docs checks 모두 성공. 서버 옛 함수 삭제(항목 3)는 이번 범위 제외, ⑪에서 별도 승인 후 진행. |
-| 2026-10-20 | v2.7.12 | CL AI, 원본 지원 검토 | 관리자 설정 링크 3개 주소·헤더 안내 반영. PR #3 main 병합: e78a4ab3938bfe25b4b0a6a66babaa653d040fcf (2026-10-20 16:04 KST). 원본 지원 확인: 배포 작업 모두 성공, 배포된 admin_settings.js·html은 원본 08d10fe9ff6c125ed176c2fee6877942a4398888과 일치. 서버 옛 함수 삭제는 ⑪ 별도 승인 전까지 보류. |
+| 2026-10-20 | v2.7.11 | CL AI, 원본 지원 검토 | 미사용 웹훅 코드·체크리스트 정리 반영. PR #3 main 병합: e78a4ab3938bfe25b4b0a6a66babaa653d040fcf (2026-10-20 16:04 KST). 원본 지원 확인: Deploy Supabase Functions·Deploy CIEL web pages·Web and docs checks 모두 성공. v2.7.11 항목 3 완료: 원장님 승인 범위(옛 함수 12개만)에 따라 원본 담당자가 Supabase 대시보드에서 직접 삭제했고 원본 지원이 확인함. 서버 함수 35개와 CL main 함수 목록 35개 일치. 삭제 목록은 아래 참조. 구 템플릿은 유지. |
+| 2026-10-20 | v2.7.12 | CL AI, 원본 지원 검토 | 관리자 설정 링크 3개 주소·헤더 안내 반영. PR #3 main 병합: e78a4ab3938bfe25b4b0a6a66babaa653d040fcf (2026-10-20 16:04 KST). 원본 지원 확인: 배포 작업 모두 성공, 배포된 admin_settings.js·html은 원본 08d10fe9ff6c125ed176c2fee6877942a4398888과 일치. 서버 옛 함수 삭제는 원본 담당자 직접 수행·원본 지원 확인으로 완료(아래 기록). 구 템플릿은 유지. |
+
+### v2.7.11 항목 3 — 서버 옛 함수 삭제 완료
+
+- 근거: 원본 지원의 완료 회신. 원장님 승인 후 원본 담당자가 Supabase 대시보드에서 직접 삭제, 원본 지원이 확인. CL AI는 삭제를 실행하지 않고 완료 기록만 반영함.
+- 삭제 12개: `generate-report`, `generate-tuition`, `send-class-daily-reports`, `send-selected-notifications`, `sync-exam-scope`, `sync-registration-class-session`, `sync-registration-end`, `sync-registration-enroll`, `mark-report-source-dirty`, `sync-registration-timetable`, `sync-school-schedules`, `sync-student-report`.
+- 확인 결과(원본 지원): 현재 서버 함수 35개가 CL 저장소 main의 `supabase/functions` 목록 35개와 일치.
+- ⑪ 이번 승인·실행 범위는 위 12개 함수뿐이며 구 템플릿은 그대로 유지. 알림톡 실시험·최종 인수 완료를 의미하지 않음.
