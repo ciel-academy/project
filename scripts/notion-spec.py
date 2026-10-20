@@ -62,6 +62,12 @@ def norm_query(q):
 def norm_view(v):
     o = {"name": v.get("name", ""), "type": v.get("type"), "visible": v.get("visible", []),
          "query": norm_query(v.get("query"))}
+    # 조건을 다 지운 빈 필터 묶음과 집계 순서는 화면에 차이가 없어 비교에서 뺀다
+    q = o["query"]
+    if isinstance(q.get("filter"), dict) and not q["filter"].get("filters"):
+        del q["filter"]
+    if isinstance(q.get("aggregations"), list):
+        q["aggregations"] = sorted(q["aggregations"], key=lambda a: json.dumps(a, sort_keys=True, ensure_ascii=False))
     for k in ("db", "groupBy", "icon"):
         if v.get(k):
             o[k] = v[k]
@@ -462,6 +468,8 @@ def cond_text(f):
         s = join.join(parts)
         return f"({s})" if len(parts) > 1 and f.get("operator") == "or" else s
     prop, flt = f.get("property"), f.get("filter") or {}
+    if not prop:  # 조건 없는 빈 묶음({"operator": "or"} 등)
+        return ""
     if flt.get("subfilter"):
         flt = flt["subfilter"]
     op, val = flt.get("operator"), flt.get("value")
@@ -585,13 +593,16 @@ def render_layouts(spec, scanned_at):
                     continue
                 out += ["", f"대시보드 탭 `{t.get('name')}`:", ""]
                 for gf in t.get("globalFilters") or []:
-                    tg = ", ".join(f"{x['db']} `{x['property']}`" for x in gf.get("targets") or [])
-                    out.append(f"- 공통 필터: 이 페이지 포함 → {tg}")
+                    for x in gf.get("targets") or []:
+                        out.append(f"- 공통 필터: {cond_text({'property': x['property'], 'filter': gf.get('filter') or {}})}"
+                                   f" ({x['db']})")
                 for i, row in enumerate(t.get("widgets") or [], 1):
                     for w in row:
                         cond = tab_cond(w)
+                        cols = "" if w.get("chart") else " · ".join(w.get("visible") or [])
                         out.append(f"- {i}줄 `{w.get('name')}` ({w.get('db')}): "
                                    + (chart_text(w["chart"]) if w.get("chart") else VIEW.get(w.get("type"), w.get("type")))
+                                   + (f" · 열 {cols}" if cols else "")
                                    + (f" · {cond}" if cond else ""))
         out += ["", "### 3. 세부 정보 보기", ""]
         side = L.get("sidebar") or []
