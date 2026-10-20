@@ -167,7 +167,7 @@ async function sendOneStudentReport(
     const studyContent = getFormulaText(attendancePage, "학습 내용(보고서)")
     const parentPhone = await resolveParentPhone(attendancePage, registrationId)
 
-    const REPORT_PATH = Deno.env.get("REPORT_PATH") ?? "/project/student_report.html"
+    const REPORT_PATH = Deno.env.get("REPORT_PATH") ?? "/project1/student_report.html"
     const tokenQueryString = REPORT_PATH + "?token=" + access_token
     const variables: Record<string, string> = {
       "#{학생이름}": studentName,

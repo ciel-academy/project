@@ -10,11 +10,6 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Guard CIEL deployment target
-        env:
-          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
-        run: |
-          test "$SUPABASE_PROJECT_ID" = "xccfjfzpvqginpeviupn" || { echo "::error::Deployment target does not match CIEL project"; exit 1; }
       - name: Call sync-attendance (mode=incremental)
         run: |
           set -e

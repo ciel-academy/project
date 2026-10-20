@@ -61,6 +61,7 @@ import {
 } from "../_shared/alimtalkShared.ts"
 import { refreshStudentReport } from "../_shared/dailyReportRefresh.ts"
 import { runInBackground, respondAccepted } from "../_shared/backgroundTask.ts"
+import { enqueueSync, wakeSyncQueueWorker } from "../_shared/syncQueue.ts"
 
 const ALIMTALK_CONFIG_CATEGORY = "보고서" as const
 
@@ -70,7 +71,7 @@ const SOLAPI_SENDER_NUMBER_FALLBACK = Deno.env.get("SOLAPI_SENDER_NUMBER") ?? ""
 const SOLAPI_PF_ID_FALLBACK = Deno.env.get("SOLAPI_PF_ID") ?? ""
 const SOLAPI_TEMPLATE_ID_WEEKLY_FALLBACK = Deno.env.get("SOLAPI_TEMPLATE_ID_WEEKLY") ?? ""
 const SOLAPI_TEMPLATE_ID_MONTHLY_FALLBACK = Deno.env.get("SOLAPI_TEMPLATE_ID_MONTHLY") ?? ""
-const REPORT_PATH = Deno.env.get("REPORT_PATH") ?? "/project/student_report.html"
+const REPORT_PATH = Deno.env.get("REPORT_PATH") ?? "/project1/student_report.html"
 
 // 보고서(학원) DB / 수강료(학원) DB에 공통으로 있는 체크박스. send-selected-notifications가
 // 일괄전송 대상을 고르는 필터이기도 하다 (_shared/PROP_BULK_SELECT와 이름을 동일하게 유지).
@@ -145,6 +146,19 @@ Deno.serve(async (req) => {
       status: 401,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     })
+  }
+
+  // (v2.6.24) 보고서 DB 자동화("전송 상태"가 ⚪ 대기로 바뀌면)가 부르는 경로. 큐에 넣고 바로 202.
+  // process-sync-queue가 한 건씩 보낸다(_shared/noticeQueue.ts). 발송함 [일괄 전송]도 페이지마다 이 경로로 온다.
+  if (new URL(req.url).pathname.split("/").pop() === "queue") {
+    const queuedId = body?.data?.id ?? body?.reportId ?? null
+    if (!queuedId) {
+      return new Response(JSON.stringify({ error: "페이지 id를 찾지 못했어요." }), { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } })
+    }
+    const clickerUserId = body?.data?.properties?.["실행자"]?.people?.[0]?.id ?? null
+    await enqueueSync("notice", { kind: "report", pageId: queuedId, clickerUserId })
+    wakeSyncQueueWorker()
+    return respondAccepted({ pageId: queuedId, queued: true })
   }
 
   try {
