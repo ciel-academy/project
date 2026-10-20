@@ -127,6 +127,6 @@
 ### v2.7.11 항목 3 — 서버 옛 함수 삭제 완료
 
 - 근거: 원본 지원의 완료 회신. 원장님 승인 후 원본 담당자가 Supabase 대시보드에서 직접 삭제, 원본 지원이 확인. CL AI는 삭제를 실행하지 않고 완료 기록만 반영함.
-- 삭제 12개: `generate-report`, `generate-tuition`, `send-class-daily-reports`, `send-selected-notifications`, `sync-exam-scope`, `sync-registration-class-session`, `sync-registration-end`, `sync-registration-enroll`, `mark-report-source-dirty`, `sync-registration-timetable`, `sync-school-schedules`, `sync-student-report`.
+- 삭제 범위: 원장님이 승인한 미사용 서버 함수 12개. 함수별 상세 목록은 새 템플릿의 시스템 정보 → 「⑪ 서버 옛 함수 삭제 완료 — 구 템플릿 유지」에 보존합니다. 함수 재도입이나 코드 변경은 없습니다.
 - 확인 결과(원본 지원): 현재 서버 함수 35개가 CL 저장소 main의 `supabase/functions` 목록 35개와 일치.
 - ⑪ 이번 승인·실행 범위는 위 12개 함수뿐이며 구 템플릿은 그대로 유지. 알림톡 실시험·최종 인수 완료를 의미하지 않음.
