@@ -173,3 +173,13 @@
 - Code/server/migrations/Secrets/integration changes and deployments: NOT APPLICABLE to these patches; none performed. Business-data writes/deletions, token regeneration, parent messaging and sample-data cleanup: none performed. Original repository remains read-only. This commit updates the operational history document only.
 - Fingerprint: no new baseline-match claim. Prior v2.7.15 baseline record 2026-10-20T14:36:09.062Z and operation-specific library-series difference retained; NOT reverified this turn.
 - Next: operator completes the two v2.7.17 screen steps and supplies a current scan or screen confirmation; then apply dependent 7-2 wording, rescan/compare and record verified scope. Test sending requires separate explicitly scoped approval.
+
+
+## 2026-10-24 — v2.7.17 operator screen completion / manual follow-up
+
+- Owner reported both requested screen steps complete. Attendance progress-textbook tab removal is OPERATOR-CONFIRMED, not independently scanned or visually checked by the agent; MCP does not expose the full tab list.
+- Independent MCP readback confirmed progress-textbook subject visibility is now hide, previously hide_if_empty; individual/group textbook links retain hide_if_empty. Subject property remains present. No agent layout/schema writes were performed.
+- Textbooks/learning 7-2: replaced both published source-text matches per fixed source ab02f76d5126eeb90492ebe881e707afcc108aae. Selection of Today learning is directed to the class-session progress-textbook tab; the attendance tab/button absence and shared group selections are explained. Readback confirmed both final passages.
+- Earlier screen-pending/manual-on-hold notes are historical checkpoints, superseded only for this confirmed scope. Pre-change excerpts remain preserved privately.
+- Full current Notion fingerprint scan, class-session learning-record generation test, report home/five tabs and prior v2.7.16 assessment/assignment visual acceptance remain NOT VERIFIED. Sending test not performed; no parent messages, business-data changes, code/server deployment or Secrets changes.
+- Last fully applied version remains v2.7.15; no full-completion promotion or new baseline-match timestamp. Next: obtain current scan for fingerprint comparison and complete scoped report acceptance. Test sending requires separate scoped approval.
