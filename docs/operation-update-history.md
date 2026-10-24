@@ -159,3 +159,17 @@
 - 기준 일치: 기존 v2.7.15 기록의 2026-10-20T14:36:09.062Z 지문 기준 및 탭 4개 원문 비교 완료 기록을 유지. 이번에는 Notion 스캔을 다시 수행하지 않음. 라이브러리 시리즈 선택지는 운영 고유 데이터 차이로 유지.
 - 마지막 전체 적용 완료 기록: v2.7.15. v2.7.16은 코드·배포 검증 완료, 실제 학생 화면 검수 미완료이므로 전체 적용 완료로 승격하지 않음. 기존 알림톡 실시험·최종 설치 인수 및 일부 웹훅 미도착 원인 미확인 상태도 별개로 유지.
 - 복구: 문제가 있으면 위 적용 전 운영 커밋의 리포트 세 파일만 복원하고 Pages 재배포. 원본 저장소에는 변경하지 않음.
+
+
+## 2026-10-24 — v2.7.17 paused / v2.7.18 manual text applied, acceptance pending
+
+- Operator: CIEL operational Notion AI, owner approved the full presented plan. Read-only source fixed at hada-notion/project1 ab02f76d5126eeb90492ebe881e707afcc108aae; operational baseline c33beb7911c1fdbb74313b0fb4798426b01c0b89.
+- Last fully applied version remains v2.7.15. The prior v2.7.16 code/Pages verification record is preserved; actual student report acceptance is still NOT VERIFIED. No version promotion.
+- Pre-edit affected manual text and limited database configuration observations were preserved in private system information. This is NOT a complete restorable scan. MCP reads do not expose the full page-tab list, button actions or automation definitions. Full scan/fingerprint comparison was not performed.
+- v2.7.17: attendance schema has no learning-record-generation button. Attendance progress-textbook tab presence/removal is NOT VERIFIED; operator screen action pending. Progress-textbook subject panel visibility remains hide_if_empty; official operator action to always hide is pending. No DB schema, layout, property, formula, button or automation changes were made. Dependent manual 7-2 replacements are ON HOLD until attendance tab removal is verified.
+- v2.7.18: exact published source-text matches were updated on seven operational manual pages: textbooks/learning (7-4), reports/tuition/textbook fees (intro and new 10-0), parent report (9-3 home item), parent report user guide (home section, five tabs, sections 1-8, recent assessment trend), classes/attendance (6-5), schedules (11-3), basic workflow/enrollment (4-2). All seven were read back; targeted wording and contiguous section numbering confirmed. Unrelated content and existing links retained. No missing source matches among these v2.7.18 targets.
+- Manual update is complete; full patch acceptance is NOT COMPLETE. Pending: test report home/five-tab visual check, prior v2.7.16 same-day assessment average/details and assignment deadline/end-date checks, full Notion scan/compare, v2.7.17 screen work and dependent 7-2 text. Sending-button verification remains unperformed; no parent messages were sent.
+- Source caveats retained: empty-total-question score rendering and calendar-description discrepancy remain unverified. No generic claims substituted for actual screen checks.
+- Code/server/migrations/Secrets/integration changes and deployments: NOT APPLICABLE to these patches; none performed. Business-data writes/deletions, token regeneration, parent messaging and sample-data cleanup: none performed. Original repository remains read-only. This commit updates the operational history document only.
+- Fingerprint: no new baseline-match claim. Prior v2.7.15 baseline record 2026-10-20T14:36:09.062Z and operation-specific library-series difference retained; NOT reverified this turn.
+- Next: operator completes the two v2.7.17 screen steps and supplies a current scan or screen confirmation; then apply dependent 7-2 wording, rescan/compare and record verified scope. Test sending requires separate explicitly scoped approval.
